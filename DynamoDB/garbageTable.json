@@ -1,0 +1,170 @@
+{
+  "GarbageDisposalNotificationStack-garbageTable5D21381D-WERPD4BX10OW": [
+    {
+      "PutRequest": {
+        "Item": {
+          "Id": {
+            "N": "0"
+          },
+          "DayOfWeek": {
+            "S": "日曜日"
+          },
+          "Garbages": {
+            "L": [
+              {
+                "S": ""
+              }
+            ]
+          },
+          "FinishStatus": {
+            "N": "0"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Id": {
+            "N": "1"
+          },
+          "DayOfWeek": {
+            "S": "月曜日"
+          },
+          "Garbages": {
+            "L": [
+              {
+                "S": "一般ゴミ"
+              },
+              {
+                "S": "有害ゴミ"
+              },
+              {
+                "S": "びん・かん"
+              }
+            ]
+          },
+          "FinishStatus": {
+            "N": "0"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Id": {
+            "N": "2"
+          },
+          "DayOfWeek": {
+            "S": "火曜日"
+          },
+          "Garbages": {
+            "L": [
+              {
+                "S": ""
+              }
+            ]
+          },
+          "FinishStatus": {
+            "N": "0"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Id": {
+            "N": "3"
+          },
+          "DayOfWeek": {
+            "S": "水曜日"
+          },
+          "Garbages": {
+            "L": [
+              {
+                "S": "プラスチック"
+              },
+              {
+                "S": "整容器類"
+              }
+            ]
+          },
+          "FinishStatus": {
+            "N": "0"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Id": {
+            "N": "4"
+          },
+          "DayOfWeek": {
+            "S": "木曜日"
+          },
+          "Garbages": {
+            "L": [
+              {
+                "S": "一般ゴミ"
+              },
+              {
+                "S": "有害ゴミ"
+              }
+            ]
+          },
+          "FinishStatus": {
+            "N": "0"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Id": {
+            "N": "5"
+          },
+          "DayOfWeek": {
+            "S": "金曜日"
+          },
+          "Garbages": {
+            "L": [
+              {
+                "S": ""
+              }
+            ]
+          },
+          "FinishStatus": {
+            "N": "0"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Id": {
+            "N": "6"
+          },
+          "DayOfWeek": {
+            "S": "土曜日"
+          },
+          "Garbages": {
+            "L": [
+              {
+                "S": ""
+              }
+            ]
+          },
+          "FinishStatus": {
+            "N": "0"
+          }
+        }
+      }
+    }
+  ]
+}
