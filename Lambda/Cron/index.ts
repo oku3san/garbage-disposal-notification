@@ -56,6 +56,7 @@ const eventHandler: any = async () => {
 
     if (itemObj.Item.Garbages[0] === "") {
       lineMessage = {type: "text", text: `${dayOfWeek}のゴミはありません`}
+      await changeFinishStatus(1, 1)
     }
     else {
       lineMessage = {
@@ -119,11 +120,16 @@ const fetchGarbageData = async () => {
   }
 }
 
-const changeFinishStatus = async (statusArg: number) => {
+const changeFinishStatus = async (statusArg: number, nothing?: number) => {
   const todayId = getDayId()
   const status: number = statusArg
+  let id = todayId
 
-  const id = todayId
+  if (typeof nothing == 'undefined') {
+    id = todayId
+  } else {
+    id = todayId + 1
+  }
 
   const params = {
     TableName: garbageTable,

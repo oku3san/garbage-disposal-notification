@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="newrelic2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/cdk.out/asset.fa9e975e289b8ea33d7699760ac4841b94558c6bd82ed9cc5c1c336d3e2bb173/layer/newrelic.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
