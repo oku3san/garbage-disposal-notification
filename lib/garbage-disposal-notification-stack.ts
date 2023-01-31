@@ -1,18 +1,20 @@
-import * as cdk from '@aws-cdk/core';
-import * as apigatewayv2 from '@aws-cdk/aws-apigatewayv2';
-import * as apigatewayv2Integration from '@aws-cdk/aws-apigatewayv2-integrations';
-import * as logs from '@aws-cdk/aws-logs';
-import * as certificatemanager from '@aws-cdk/aws-certificatemanager';
-import * as route53 from "@aws-cdk/aws-route53";
-import * as ssm from "@aws-cdk/aws-ssm";
-import * as dynamodb from '@aws-cdk/aws-dynamodb';
-import * as events from '@aws-cdk/aws-events';
-import * as targets from '@aws-cdk/aws-events-targets';
-import * as lambda from '@aws-cdk/aws-lambda';
-import * as iam from '@aws-cdk/aws-iam';
+import {Stack, StackProps, RemovalPolicy} from 'aws-cdk-lib';
+import { Construct } from "constructs";
+import * as apigatewayv2 from 'aws-cdk-lib/aws-apigatewayv2';
+import * as apigatewayv2alpha from '@aws-cdk/aws-apigatewayv2-alpha';
+import * as apigatewayv2Integration from '@aws-cdk/aws-apigatewayv2-integrations-alpha';
+import * as logs from 'aws-cdk-lib/aws-logs';
+import * as certificatemanager from 'aws-cdk-lib/aws-certificatemanager';
+import * as route53 from "aws-cdk-lib/aws-route53";
+import * as ssm from "aws-cdk-lib/aws-ssm";
+import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
+import * as events from 'aws-cdk-lib/aws-events';
+import * as targets from 'aws-cdk-lib/aws-events-targets';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+import * as iam from 'aws-cdk-lib/aws-iam';
 
-export class GarbageDisposalNotificationStack extends cdk.Stack {
-  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
+export class GarbageDisposalNotificationStack extends Stack {
+  constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
     // The code that defines your stack goes here
@@ -34,7 +36,7 @@ export class GarbageDisposalNotificationStack extends cdk.Stack {
     const garbageTable = new dynamodb.Table(this, 'garbageTable', {
       partitionKey: { name: 'Id', type: dynamodb.AttributeType.NUMBER },
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
-      removalPolicy: cdk.RemovalPolicy.RETAIN
+      removalPolicy: RemovalPolicy.RETAIN
     });
 
     const lineBotNodejsFunction = new lambda.DockerImageFunction(this, 'lineBotNodejsFunction', {
@@ -57,12 +59,12 @@ export class GarbageDisposalNotificationStack extends cdk.Stack {
       actions: ['secretsmanager:GetSecretValue']
     }));
 
-    const lineBotHttpApiDomain = new apigatewayv2.DomainName(this, 'lineBotHttpApiDomain', {
+    const lineBotHttpApiDomain = new apigatewayv2alpha.DomainName(this, 'lineBotHttpApiDomain', {
       domainName: "lineapi." + domain,
       certificate: lineApiAcm
     })
 
-    const lineBotHttpApi = new apigatewayv2.HttpApi(this, 'lineBotHttpApi', {
+    const lineBotHttpApi = new apigatewayv2alpha.HttpApi(this, 'lineBotHttpApi', {
       apiName: 'LineBotHttpApi',
       defaultDomainMapping: {
         domainName: lineBotHttpApiDomain
@@ -71,11 +73,20 @@ export class GarbageDisposalNotificationStack extends cdk.Stack {
 
     lineBotHttpApi.addRoutes({
       path: '/',
-      methods: [ apigatewayv2.HttpMethod.POST ],
-      integration: new apigatewayv2Integration.LambdaProxyIntegration({
-        handler: lineBotNodejsFunction
-      })
-    })
+      methods: [ apigatewayv2alpha.HttpMethod.POST ],
+      // integration: new apigatewayv2Integration.LambdaProxyIntegration({
+      //   handler: lineBotNodejsFunction
+      // })
+      integration: new apigatewayv2Integration.HttpLambdaIntegration('apigatewayv2Integration', lineBotNodejsFunction)
+    });
+
+    // console.log(lineBotHttpApi.node.findChild('POST--').node.findChild('apigatewayv2Integration').node.findChild('Resource'))
+    // const defaultRoute = lineBotHttpApi.node.findChild('POST--');
+    // console.log(defaultRoute)
+    // const myInt = defaultRoute.node.findChild('HttpIntegration');
+    // console.log(myInt)
+    const resource = lineBotHttpApi.node.findChild('POST--').node.findChild('apigatewayv2Integration').node.findChild('Resource') as apigatewayv2.CfnIntegration;
+    resource.overrideLogicalId('lineBotHttpApiPOSTHttpIntegration0bbd09debedb610c70dde7fc9f80d0791463B9B6');
 
     new route53.CnameRecord(this, 'cnameRecord', {
       zone: hostedZone,
