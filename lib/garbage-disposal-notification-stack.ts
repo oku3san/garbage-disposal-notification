@@ -74,17 +74,10 @@ export class GarbageDisposalNotificationStack extends Stack {
     lineBotHttpApi.addRoutes({
       path: '/',
       methods: [ apigatewayv2alpha.HttpMethod.POST ],
-      // integration: new apigatewayv2Integration.LambdaProxyIntegration({
-      //   handler: lineBotNodejsFunction
-      // })
       integration: new apigatewayv2Integration.HttpLambdaIntegration('apigatewayv2Integration', lineBotNodejsFunction)
     });
 
-    // console.log(lineBotHttpApi.node.findChild('POST--').node.findChild('apigatewayv2Integration').node.findChild('Resource'))
-    // const defaultRoute = lineBotHttpApi.node.findChild('POST--');
-    // console.log(defaultRoute)
-    // const myInt = defaultRoute.node.findChild('HttpIntegration');
-    // console.log(myInt)
+    // _children をひたすら探して findChild に定義して Resouce を定義する
     const resource = lineBotHttpApi.node.findChild('POST--').node.findChild('apigatewayv2Integration').node.findChild('Resource') as apigatewayv2.CfnIntegration;
     resource.overrideLogicalId('lineBotHttpApiPOSTHttpIntegration0bbd09debedb610c70dde7fc9f80d0791463B9B6');
 
